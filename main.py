@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+from sklearn.svm import SVC
 
 
 def emg_muap(x):
@@ -171,60 +172,64 @@ if __name__ == '__main__':
     # plt.plot(muaps7_2[:, :])
     plt.plot(muaps8_2[:, :])
     plt.grid(True)
-    # plt.show()
+    plt.show()
 
     # Формирование обучающей выборки
 
-    Xlern = np.column_stack((muaps1_1[:,1], muaps1_2[:,1],
-                            muaps2_1[:,1], muaps2_2[:,1],
-                            muaps3_1[:,1], muaps3_2[:,1],
-                            muaps4_1[:,1], muaps4_2[:,1],
-                            muaps6_1[:,1], muaps6_2[:,1],
-                            muaps8_1[:,1], muaps8_2[:,1],
-                            muaps1_1[:,2], muaps1_2[:,2],
-                            muaps2_1[:,2], muaps2_2[:,2],
-                            muaps3_1[:,2], muaps3_2[:,2],
-                            muaps4_1[:,2], muaps4_2[:,2],
-                            muaps6_1[:,2], muaps6_2[:,2],
-                            muaps8_1[:,2], muaps8_2[:,2],
-                            muaps1_1[:,3], muaps1_2[:,3],
-                            muaps2_1[:,3], muaps2_2[:,3],
-                            muaps3_1[:,3], muaps3_2[:,3],
-                            muaps4_1[:,3], muaps4_2[:,3],
-                            muaps6_1[:,3], muaps6_2[:,3],
-                            muaps8_1[:,3], muaps8_2[:,3])).T
+    Xlern = np.column_stack((muaps1_1[:, 1], muaps1_2[:, 1],
+                             muaps2_1[:, 1], muaps2_2[:, 1],
+                             muaps3_1[:, 1], muaps3_2[:, 1],
+                             muaps4_1[:, 1], muaps4_2[:, 1],
+                             muaps6_1[:, 1], muaps6_2[:, 1],
+                             muaps8_1[:, 1], muaps8_2[:, 1],
+                             muaps1_1[:, 2], muaps1_2[:, 2],
+                             muaps2_1[:, 2], muaps2_2[:, 2],
+                             muaps3_1[:, 2], muaps3_2[:, 2],
+                             muaps4_1[:, 2], muaps4_2[:, 2],
+                             muaps6_1[:, 2], muaps6_2[:, 2],
+                             muaps8_1[:, 2], muaps8_2[:, 2],
+                             muaps1_1[:, 3], muaps1_2[:, 3],
+                             muaps2_1[:, 3], muaps2_2[:, 3],
+                             muaps3_1[:, 3], muaps3_2[:, 3],
+                             muaps4_1[:, 3], muaps4_2[:, 3],
+                             muaps6_1[:, 3], muaps6_2[:, 3],
+                             muaps8_1[:, 3], muaps8_2[:, 3],
+                             )).T
 
-    print(Xlern.shape)
+    # print(Xlern.shape)
 
     # Правильные ответы для обучающей выборки
-    Ylearn = [1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1,
-         1, -1, 1, -1]
+    Ylearn = [1, -1] * 18
 
-    # Метод наименьших квадратов
+    # линеечка
+    xlearn = np.concatenate((Xlern, np.ones((36, 1))), axis=1)
+    print(xlearn.shape)
+    c = np.linalg.pinv(xlearn.T @ xlearn) @ xlearn.T @ Ylearn
 
-    c = np.linalg.inv(Xlern.T @ Xlern) @ Xlern.T @ Ylearn
+    # векторы
+    svc = SVC(C=10, kernel='rbf')
+    svc.fit(Xlern, Ylearn)
 
-    print(c)
+    muaps1 = [muaps1_1, muaps2_1, muaps3_1, muaps4_1, muaps6_1, muaps8_1]
+    muaps2 = [muaps1_2, muaps2_2, muaps3_2, muaps4_2, muaps6_2, muaps8_2]
 
-    X = np.concatenate((
-    muaps1_1[:, 4: ], muaps1_2[:, 4:],
-    muaps2_1[:, 4:], muaps2_2[:, 4:],
-    muaps3_1[:, 4:], muaps3_2[:, 4:],
-    muaps4_1[:, 4:], muaps4_2[:, 4:],
-    muaps6_1[:, 4:], muaps6_2[:, 4:],
-    muaps8_1[:, 4:], muaps8_2[:, 4:],
-    ), axis=1)
+    total_preds = 0
+    mispreds = 0
+    for muaps in muaps1:
+        for muap_i in range(4, muaps.shape[1]):
+            total_preds += 1
+            result = svc.predict(np.array([muaps[:, muap_i]]))
+            if result != 1:
+                mispreds += 1
+    print('good prediction rate for 1:', (total_preds - mispreds) / total_preds)
 
-    print(X.shape)
-
-    np.random.shuffle(X.T)
-    X = X.T
-
-    print(X)
-
-    #Метод опорных векторов
-    #cx + b = 1; cx+b = -1
-    #W = 2|arg(c) - ширина границы
-    #или min c^2
-    # для борьбы с переобучением часть точек вблизи границы может быть проигнорирована
+    total_preds = 0
+    mispreds = 0
+    for muaps in muaps2:
+        for muap_i in range(4, muaps.shape[1]):
+            total_preds += 1
+            result = svc.predict(np.array([muaps[:, muap_i]]))
+            if result != -1:
+                mispreds += 1
+    print('good prediction rate for 2:', (total_preds - mispreds) / total_preds)
 

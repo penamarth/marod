@@ -200,14 +200,22 @@ if __name__ == '__main__':
     Ylearn = [1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1,
          1, -1, 1, -1]
 
-    # X = np.array([])
-
-
-
     # Метод наименьших квадратов
 
     C = np.linalg.inv(Xlern.T @ Xlern) @ Xlern.T @ Ylearn
 
     print(C)
 
-    N = 6
+    X = np.array([])
+
+    for i in range(3,16):
+
+             np.concatenate((X,np.column_stack(
+                muaps1_1[:, i], muaps1_2[:, i],
+                muaps2_1[:, i], muaps2_2[:, i],
+                muaps3_1[:, i], muaps3_2[:, i],
+                muaps4_1[:, i], muaps4_2[:, i],
+                muaps6_1[:, i], muaps6_2[:, i],
+                muaps8_1[:, i], muaps8_2[:, i],
+            )
+

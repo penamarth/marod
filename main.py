@@ -206,16 +206,19 @@ if __name__ == '__main__':
 
     print(C)
 
-    X = np.array([])
+    X = np.concatenate((
+    muaps1_1[:, 4: ], muaps1_2[:, 4:],
+    muaps2_1[:, 4:], muaps2_2[:, 4:],
+    muaps3_1[:, 4:], muaps3_2[:, 4:],
+    muaps4_1[:, 4:], muaps4_2[:, 4:],
+    muaps6_1[:, 4:], muaps6_2[:, 4:],
+    muaps8_1[:, 4:], muaps8_2[:, 4:],
+    ), axis=1)
 
-    for i in range(3,16):
+    print(X.shape)
 
-             np.concatenate((X,np.column_stack(
-                muaps1_1[:, i], muaps1_2[:, i],
-                muaps2_1[:, i], muaps2_2[:, i],
-                muaps3_1[:, i], muaps3_2[:, i],
-                muaps4_1[:, i], muaps4_2[:, i],
-                muaps6_1[:, i], muaps6_2[:, i],
-                muaps8_1[:, i], muaps8_2[:, i],
-            )
+    np.random.shuffle(X.T)
+    X = X.T
+
+    print(X)
 

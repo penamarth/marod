@@ -19,11 +19,11 @@ def emg_muap(x):
         maxValue = np.max(xWnd)  # ищем максимальное значение
         maxIndices = np.argmax(xWnd)  # сохраняем индекс максимального значения
         if (maxIndices == wnd_size // 2) and (maxValue > 5000):
-            muaps[:, numMuaps] = x[k + wnd_size // 2 - muap_left:k + wnd_size // 2 + muap_right]
+            muaps[:, numMuaps] = np.array(x[k + wnd_size // 2 - muap_left:k + wnd_size // 2 + muap_right])
             numMuaps = numMuaps + 1  # ещё один муап
 
     muaps = muaps[:, :numMuaps]
-    return (muaps)
+    return muaps
 
 
 if __name__ == '__main__':
@@ -175,32 +175,35 @@ if __name__ == '__main__':
     plt.show()
 
     # Формирование обучающей выборки
-    Xlern =[muaps1_1[1],muaps1_2[1],
-            muaps2_1[1], muaps2_2[1],
-            muaps3_1[1], muaps3_2[1],
-            muaps4_1[1], muaps4_2[1],
-            muaps6_1[1], muaps6_2[1],
-            muaps8_1[1], muaps8_2[1],
-            muaps1_1[2], muaps1_2[2],
-            muaps2_1[2], muaps2_2[2],
-            muaps3_1[2], muaps3_2[2],
-            muaps4_1[2], muaps4_2[2],
-            muaps6_1[2], muaps6_2[2],
-            muaps8_1[2], muaps8_2[2],
-            muaps1_1[3], muaps1_2[3],
-            muaps2_1[3], muaps2_2[3],
-            muaps3_1[3], muaps3_2[3],
-            muaps4_1[3], muaps4_2[3],
-            muaps6_1[3], muaps6_2[3],
-            muaps8_1[3], muaps8_2[3]]
+
+
+
+    Xlern = np.array([muaps1_1[1].T,muaps1_2[1].T,
+            muaps2_1[1].T, muaps2_2[1].T,
+            muaps3_1[1].T, muaps3_2[1].T,
+            muaps4_1[1].T, muaps4_2[1].T,
+            muaps6_1[1].T, muaps6_2[1].T,
+            muaps8_1[1].T, muaps8_2[1].T,
+            muaps1_1[2].T, muaps1_2[2].T,
+            muaps2_1[2].T, muaps2_2[2].T,
+            muaps3_1[2].T, muaps3_2[2].T,
+            muaps4_1[2].T, muaps4_2[2].T,
+            muaps6_1[2].T, muaps6_2[2].T,
+            muaps8_1[2].T, muaps8_2[2].T,
+            muaps1_1[3].T, muaps1_2[3].T,
+            muaps2_1[3].T, muaps2_2[3].T,
+            muaps3_1[3].T, muaps3_2[3].T,
+            muaps4_1[3].T, muaps4_2[3].T,
+            muaps6_1[3].T, muaps6_2[3].T,
+            muaps8_1[3].T, muaps8_2[3].T])
 
     # Правильные ответы для обучающей выборки
-    Y = [1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1]
+    Y = np.array([1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1]).T
 
-    X = np.array([])
+    #X = np.array([])
 
     #Метод наименьших квадратов
-    С = np.linalg.inv(np.array(X.T @ X)) @ X.T @ Y
+    #С = np.linalg.inv(np.array(X.T @ X)) @ X.T @ Y
 
 
 

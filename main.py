@@ -65,14 +65,14 @@ if __name__ == '__main__':
     x8_2 -= np.mean(x1_1)
 
     # Очистка от пиков
-    # plt.figure(figsize=(10, 6))
-    # x2[21126] = x1[21125]
+    #plt.figure(figsize=(10, 6))
+    #x1_1[37376] = x1_1[37375]
     #
-    # plt.plot(x7_2[:])
+    #plt.plot(x1_2[:10000])
 
-    # np.savetxt('008_002_cln.txt',x2)
-    # plt.grid(True)
-    # plt.show()
+    #np.savetxt('001_001_cln.txt', x1_1)
+    #plt.grid(True)
+    #plt.show()
 
     # plt.figure(figsize=(10, 6))
     # plt.plot(x1[:], label='Движения первого типа') #Вывести
@@ -152,27 +152,27 @@ if __name__ == '__main__':
     muaps8_1 = emg_muap(y8_1)
     muaps8_2 = emg_muap(y8_2)
 
-    plt.figure(figsize=(12, 8))
-    plt.plot(muaps1_1[:, :])
-    plt.plot(muaps2_1[:, :])
-    plt.plot(muaps3_1[:, :])
-    plt.plot(muaps4_1[:, :])
-    plt.plot(muaps6_1[:, :])
+    #plt.figure(figsize=(12, 8))
+    #plt.plot(muaps1_1[:, :])
+    #plt.plot(muaps2_1[:, :])
+    #plt.plot(muaps3_1[:, :])
+    #plt.plot(muaps4_1[:, :])
+    #plt.plot(muaps6_1[:, :])
     # plt.plot(muaps7_1[:, :])
-    plt.plot(muaps8_1[:, :])
-    plt.grid(True)
+    #plt.plot(muaps8_1[:, :])
+    #plt.grid(True)
     # plt.show()
 
-    plt.figure(figsize=(12, 8))
-    plt.plot(muaps1_2[:, :])
-    plt.plot(muaps2_2[:, :])
-    plt.plot(muaps3_2[:, :])
-    plt.plot(muaps4_2[:, :])
-    plt.plot(muaps6_2[:, :])
+    #plt.figure(figsize=(12, 8))
+    #plt.plot(muaps1_2[:, :])
+    #plt.plot(muaps2_2[:, :])
+    #plt.plot(muaps3_2[:, :])
+    #plt.plot(muaps4_2[:, :])
+    #plt.plot(muaps6_2[:, :])
     # plt.plot(muaps7_2[:, :])
-    plt.plot(muaps8_2[:, :])
-    plt.grid(True)
-    plt.show()
+    #plt.plot(muaps8_2[:, :])
+    #plt.grid(True)
+    #plt.show()
 
     # Формирование обучающей выборки
 
@@ -220,7 +220,16 @@ if __name__ == '__main__':
             total_preds += 1
             result = svc.predict(np.array([muaps[:, muap_i]]))
             if result != 1:
+                color = 'r'
                 mispreds += 1
+            else:
+                color = 'b'
+
+
+            plt.figure(figsize=(12, 8))
+            plt.plot(muaps[:, muap_i], color = color)
+            plt.grid(True)
+
     print('good prediction rate for 1:', (total_preds - mispreds) / total_preds)
 
     total_preds = 0
@@ -230,6 +239,14 @@ if __name__ == '__main__':
             total_preds += 1
             result = svc.predict(np.array([muaps[:, muap_i]]))
             if result != -1:
+                color = 'y'
                 mispreds += 1
-    print('good prediction rate for 2:', (total_preds - mispreds) / total_preds)
+            else:
+                color = 'g'
 
+
+            plt.figure(figsize=(12, 8))
+            plt.plot(muaps[:, muap_i], color=color)
+            plt.grid(True)
+    print('good prediction rate for 2:', (total_preds - mispreds) / total_preds)
+    plt.show()

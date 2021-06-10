@@ -202,9 +202,9 @@ if __name__ == '__main__':
 
     # Метод наименьших квадратов
 
-    C = np.linalg.inv(Xlern.T @ Xlern) @ Xlern.T @ Ylearn
+    c = np.linalg.inv(Xlern.T @ Xlern) @ Xlern.T @ Ylearn
 
-    print(C)
+    print(c)
 
     X = np.concatenate((
     muaps1_1[:, 4: ], muaps1_2[:, 4:],
@@ -221,4 +221,10 @@ if __name__ == '__main__':
     X = X.T
 
     print(X)
+
+    #Метод опорных векторов
+    #cx + b = 1; cx+b = -1
+    #W = 2|arg(c) - ширина границы
+    #или min c^2
+    # для борьбы с переобучением часть точек вблизи границы может быть проигнорирована
 
